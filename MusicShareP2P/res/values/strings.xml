@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MusicShareP2P</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="nosong">(No song)</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="searching">Searching&#8230;</string>
+    <string name="downloading">Downloading&#8230;</string>
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="artist">Artist</string>
+    <string name="title">Title</string>
+    <string name="search">Search</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="check">Check Notifications</string>
+    <string name="publish">Publish Songs</string>
+    <string name="erasesubs">Delete requests</string>
+    <string name="erasedown">Cancel downloads</string>
+    <string name="erasepub">Unpublish files</string>
+    <string name="autodownload">Check autodownloaded files</string>
+    <string name="deleteAuto">Delete Autodownloads</string>
+    <string name="title_activity_download">DownloadActivity</string>
+    <string name="title_activity_music_setting">MusicSettingActivity</string>
+    <string name="title_activity_play_list">PlayListActivity</string>
+
+</resources>

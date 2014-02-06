@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="it.uniroma2.wifionoff"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="it.uniroma2.wifionoff.MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+   			 android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+   <activity
+            android:name="it.uniroma2.wifionoff.MyListActivity"
+            android:label="@string/title_activity_my_list" 
+            android:configChanges="orientation"
+    android:screenOrientation="portrait"
+             />
+        <receiver android:name="it.uniroma2.wifionoff.AlarmReceiver" >
+        </receiver>
+        <receiver android:name="it.uniroma2.wifionoff.WifiOffReceiver" >
+        </receiver>
+
+        <service android:name="it.uniroma2.wifionoff.OnOffService" >
+            <intent-filter>
+                <action android:name="bind.ClientService" >
+                </action>
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="it.uniroma2.wifionoff.SettingActivity"
+            android:label="@string/title_activity_setting" 
+            android:configChanges="orientation"
+    android:screenOrientation="portrait">
+        </activity>
+    </application>
+
+</manifest>
