@@ -180,11 +180,11 @@ public class SettingActivity extends Activity {
 				// TODO Auto-generated method stub
 				Log.w("Service", "Intent Wifi Received");
 				
-				if(arg1.hasExtra(WifiManager.EXTRA_WIFI_STATE)){
+				//if(arg1.hasExtra(WifiManager.EXTRA_WIFI_STATE)){
 
-					int state =  arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -3);
+				//	int state =  arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -3);
 
-					if(state==WifiManager.WIFI_STATE_ENABLED){
+				//	if(state==WifiManager.WIFI_STATE_ENABLED){
 						Log.w("Setting","Ad-hoc mode is supported");
 
 
@@ -202,12 +202,12 @@ public class SettingActivity extends Activity {
 
 
 
-					}
+					//}
 
 
 
 
-				}
+				//}
 				context.unregisterReceiver(this);
 			}
 	    };
