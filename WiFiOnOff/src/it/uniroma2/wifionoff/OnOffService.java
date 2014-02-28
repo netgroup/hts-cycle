@@ -38,7 +38,7 @@ public class OnOffService extends Service {
 	public static List<String> IPs;
 	private SQLiteDatabase database;
 	private DataBaseHelper myDbHelper;
-	private Notification n;
+
 	
 	
 
@@ -147,6 +147,8 @@ public class OnOffService extends Service {
 	@Override
 	public void onCreate() { 
 		super.onCreate();
+		myDbHelper = new DataBaseHelper(this);
+	    
 	    try {myDbHelper.createDataBase();} 
     	catch (IOException ioe) 
     	{throw new Error("Unable to create database");}
@@ -167,37 +169,14 @@ public class OnOffService extends Service {
 		database.close();
 		IPs=new ArrayList<String>();
 		Log.i(LOGTAG, "SharingFileService Created");
-		//Intent per la notifica
-				Intent intent2 = new Intent(this, MainActivity.class);
-				 PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent2, 0);
-
-				
-				
-				 //crea la notifica
-				n = new Notification.Builder(this)
-				         .setContentTitle("WiFiOnOff")
-				         .setContentText("The service is running!")
-				         .setSmallIcon(R.drawable.ic_launcher)
-				         .setContentIntent(pIntent)
-				         .setOngoing(true) 
-				         .build();
-				     
-				
-				 //attivo la notifica
-				 NotificationManager notificationManager = 
-				   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	
 		
-
-				 notificationManager.notify(0, n); 
 	}
 	
 	@Override
 	public void onDestroy(){
 		
-		NotificationManager notificationManager = 
-				   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-				 notificationManager.cancel( 0); 
+	
 		
 	}
 

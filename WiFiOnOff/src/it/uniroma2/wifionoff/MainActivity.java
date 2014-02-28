@@ -12,6 +12,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -48,7 +49,7 @@ public class MainActivity extends Activity {
 	private ImageView Stop;
 	//ListView per ora non utilizzata
 
-	
+	private Notification n;
 	private SQLiteDatabase database;
 	private DataBaseHelper myDbHelper;
 	
@@ -135,8 +136,23 @@ protected void touchcolor(){
 		Start = (ImageView) findViewById(R.id.StartService);
 		Stop = (ImageView) findViewById(R.id.StopService);
 		touchcolor();
-	
+		//Intent per la notifica
+		Intent intent2 = new Intent(this, MainActivity.class);
+		 PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent2, 0);
 
+		
+		
+		 //crea la notifica
+		n = new Notification.Builder(this)
+		         .setContentTitle("WiFiOnOff")
+		         .setContentText("The service is running!")
+		         .setSmallIcon(R.drawable.ic_launcher)
+		         .setContentIntent(pIntent)
+		         .setOngoing(true) 
+		         .build();
+		     
+
+		
 		//Click listener sui pulsanti
 		OnClickListener l = new OnClickListener(){
 
@@ -217,6 +233,14 @@ protected void touchcolor(){
 								Toast.LENGTH_LONG); 
 						toast.show();
 						
+						 //attivo la notifica
+						 NotificationManager notificationManager = 
+						   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+
+						 notificationManager.notify(0, n); 
+						
+						
 				}else if(arg0.getId() == R.id.StopService){
 					
 					Intent next = new Intent(MainActivity.this, AlarmReceiver.class);
@@ -234,6 +258,10 @@ protected void touchcolor(){
 					 
 								Intent myService = new Intent(MainActivity.this, OnOffService.class);
 							 MainActivity.this.stopService(myService);
+								NotificationManager notificationManager = 
+										   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+										 notificationManager.cancel( 0); 
 				}
 					
 				
