@@ -7,7 +7,12 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="18" />
-
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+    
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -42,6 +47,13 @@
             android:configChanges="orientation"
     android:screenOrientation="portrait" >
         </activity>
+        
+       <receiver android:name=".MusicShutReceiver" >
+            <intent-filter android:priority="2" >
+                <action android:name="it.uniroma2.shutdownbroadcast" />
+            </intent-filter>
+        </receiver> 
+        
     </application>
 
 </manifest>

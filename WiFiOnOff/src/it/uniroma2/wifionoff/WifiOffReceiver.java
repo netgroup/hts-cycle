@@ -13,7 +13,7 @@ public class WifiOffReceiver extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		
 		
-				context.sendBroadcast(new Intent(Setting.TIMEOUT_OCCURRED)); 
+		context.sendOrderedBroadcast(new Intent("it.uniroma2.shutdownbroadcast"),null); 
 				 Log.w("Service", "BroadCast Sended");
 
 				

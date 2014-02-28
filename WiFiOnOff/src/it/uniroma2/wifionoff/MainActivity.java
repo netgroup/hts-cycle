@@ -4,7 +4,7 @@ package it.uniroma2.wifionoff;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,21 +12,20 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.Notification;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ContentValues;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.res.ColorStateList;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
+
 import android.graphics.Rect;
-import android.net.wifi.WifiManager;
+
 import android.os.Bundle;
-import android.os.SystemClock;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,12 +33,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
+
 import android.view.View.OnTouchListener;
-import android.widget.ArrayAdapter;
+
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -49,9 +47,8 @@ public class MainActivity extends Activity {
 	//Pulsante stop
 	private ImageView Stop;
 	//ListView per ora non utilizzata
-	private ListView list;
-	//Notifica servizio attivo
-	private Notification n;
+
+	
 	private SQLiteDatabase database;
 	private DataBaseHelper myDbHelper;
 	
@@ -138,23 +135,8 @@ protected void touchcolor(){
 		Start = (ImageView) findViewById(R.id.StartService);
 		Stop = (ImageView) findViewById(R.id.StopService);
 		touchcolor();
-		
-		//Intent per la notifica
-		Intent intent2 = new Intent(MainActivity.this, MainActivity.class);
-		 PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, 0, intent2, 0);
+	
 
-		
-		
-		 //crea la notifica
-		 n  = new Notification.Builder(MainActivity.this)
-		         .setContentTitle("WiFiOnOff")
-		         .setContentText("The service is running!")
-		         .setSmallIcon(R.drawable.ic_launcher)
-		         .setContentIntent(pIntent)
-		         .setOngoing(true) 
-		         .build();
-		     
-		
 		//Click listener sui pulsanti
 		OnClickListener l = new OnClickListener(){
 
@@ -164,25 +146,14 @@ protected void touchcolor(){
 				
 				//Se premo Start
 				if(arg0.getId() == R.id.StartService){
-					
-					
-					
-		
-					
-				
+			
 					//creo intent
 					Intent myService = new Intent(MainActivity.this, OnOffService.class);
 				    MainActivity.this.startService(myService);
 					
-							
-					 //attivo la notifica
-					 NotificationManager notificationManager = 
-					   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
 					 Calendar cal = Calendar.getInstance();
-
-					 notificationManager.notify(0, n); 
-
-					 		
+	 		
 
 					 	
 					 	Log.w("M",""+cal.get(Calendar.SECOND));
@@ -228,21 +199,14 @@ protected void touchcolor(){
 						PendingIntent sender = PendingIntent.getBroadcast(MainActivity.this, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 						// Get the AlarmManager service
 						AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-						String ampm;
-						if( cal.get(Calendar.AM_PM)==Calendar.PM){
-							ampm=" PM";
-							
-						}else
-						{
-							ampm=" AM";
-							
-						}
+					
 				        long yourmilliseconds = (System.currentTimeMillis()) + ((   t-((System.currentTimeMillis()/1000)%(t)) )*1000)	- (Integer.parseInt(delay)) -(System.currentTimeMillis()%1000)  ;
 				        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
 
 				        Date resultdate = new Date(yourmilliseconds);
 				        System.out.println(sdf.format(resultdate));
-				     
+				        
+				        OnOffService.setDelay(Integer.parseInt(delay));
 											
 				        am.setRepeating(AlarmManager.RTC_WAKEUP, (System.currentTimeMillis()) + ((   t-((System.currentTimeMillis()/1000)%(t)) )*1000)	- (Integer.parseInt(delay)) - (System.currentTimeMillis()%1000) , 1000*(t), sender); 
 						//am.set(AlarmManager.RTC_WAKEUP,(System.currentTimeMillis()) + ((   t-((System.currentTimeMillis()/1000)%(t)) )*1000)	- (Integer.parseInt(delay))   , sender);
@@ -267,10 +231,7 @@ protected void touchcolor(){
 							"service stopped", 
 							Toast.LENGTH_LONG); 
 					toast.show();
-					 NotificationManager notificationManager = 
-							   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-							 notificationManager.cancel( 0); 
+					 
 								Intent myService = new Intent(MainActivity.this, OnOffService.class);
 							 MainActivity.this.stopService(myService);
 				}

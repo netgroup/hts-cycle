@@ -6,5 +6,11 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_my_list">MyListActivity</string>
+    <string name="title_activity_name">NameActivity</string>
+    <string name="SetName">Set Name</string>
+    <string name="Time">Set Time</string>
+    <string name="Link">See Application Linked</string>
+    <string name="Syn">Synchronize Wifi-Device Delay</string>
+    <string name="title_activity_app">AppActivity</string>
 
 </resources>

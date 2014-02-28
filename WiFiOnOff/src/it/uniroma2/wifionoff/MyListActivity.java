@@ -2,10 +2,8 @@ package it.uniroma2.wifionoff;
 
 
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.util.*;
 
 import android.app.ListActivity;
@@ -14,22 +12,17 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListAdapter;
+
 import android.widget.ListView;
 import android.widget.TextView;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
+
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.*;
-import android.support.v4.widget.CursorAdapter;
-import android.text.Editable;
-import android.text.TextWatcher;
+
 import android.util.Log;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -39,7 +32,7 @@ import android.graphics.Color;
 
 
 public class MyListActivity extends ListActivity  {
-	private EditText editcom;
+
 	private SQLiteDatabase database;
 	private DataBaseHelper myDbHelper;
     String toreturn=new String();

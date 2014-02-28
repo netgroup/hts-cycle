@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration.KeyMgmt;
 import android.os.Bundle;
@@ -87,6 +88,13 @@ public class SettingActivity extends Activity {
 			 	final IntentFilter FilterT = new IntentFilter();
 		       FilterT.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 				SettingActivity.this.registerReceiver(TestReceiver,FilterT);
+				
+				   
+				 	final IntentFilter FilterS = new IntentFilter();
+				       FilterS.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+					 	SettingActivity.this.registerReceiver(netReceiver, FilterS);
+						Log.w("LOL","NetReceiver Registered");
+				
 				start=System.currentTimeMillis();
 				
 				try{
@@ -96,26 +104,23 @@ public class SettingActivity extends Activity {
 
 
 				}
-				
-				
-				
-
-				
-				
-				
+	
 				
 			}
 			
 			
-			
-			
-			
-			
-			
 		});
 		
-		
-		
+		app.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stu
+				
+			}
+						
+		});
+				
 	}
 
 	
@@ -180,6 +185,7 @@ public class SettingActivity extends Activity {
 					int state =  arg1.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -3);
 
 					if(state==WifiManager.WIFI_STATE_ENABLED){
+						Log.w("Setting","Ad-hoc mode is supported");
 
 
 						if (mWifiManagerNew.isIbssSupported()) {
@@ -187,56 +193,7 @@ public class SettingActivity extends Activity {
 
 							configureAdhocNetwork(1);
 							Log.w("Setting","AdHocNetwork On");
-							stop=System.currentTimeMillis();
-							
-							
-							
-							Log.w("Delay", ""+(stop-start));
-							
-							
-							
-							myDbHelper = new DataBaseHelper(SettingActivity.this);
-						    
-						     
-						    try {myDbHelper.createDataBase();} 
-						    	catch (IOException ioe) 
-						    	{throw new Error("Unable to create database");}
-						     
-						    try {myDbHelper.openDataBase();}
-						    	catch(SQLException sqle){throw sqle;}
-							
-							configureAdhocNetwork(0);
-							
-							try{
-								mWifiManager.setWifiEnabled(false);
-								Log.w("Setting","WifiOn");
-							}catch(SecurityException s){
-
-
-							}
-							
-							database=myDbHelper.getReadableDatabase();
-							
-							
-							Cursor cursor;
-							cursor = database.rawQuery(("select * from delay"), null);
-							cursor.moveToFirst();
-							String Ric = new String();
-							Ric=cursor.getString(cursor.getColumnIndex("delay"));
-							Log.w("Setting","Erasing "+Ric);
-							database.delete("delay", "delay = '"+Ric+"'", null);
-							ContentValues values = new ContentValues();
-							values.put("delay",(stop-start)+"" );
-			
-							Log.w("Setting","Inserted "+(stop-start)+"");
-							database.insert("delay", null, values);
-							cursor.close();
-							
-							
-							database.close();
-							context.unregisterReceiver(this);
-							
-							
+												
 						} else {
 
 							Log.w("WifiReceiver","AdHocNetwork Not Supported");
@@ -251,10 +208,87 @@ public class SettingActivity extends Activity {
 
 
 				}
+				context.unregisterReceiver(this);
 			}
 	    };
 
 	
+
+	    public BroadcastReceiver netReceiver = new BroadcastReceiver() {
+
+
+			@Override
+			public void onReceive(Context arg0, Intent arg1) {
+				// TODO Auto-generated method stub
+				
+				NetworkInfo mWifiNetworkInfo =
+		                    (NetworkInfo) arg1.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+				
+				
+				if(mWifiNetworkInfo.isConnected()){
+					
+					stop=System.currentTimeMillis();
+					
+					
+					
+					Log.w("Delay", ""+(stop-start));
+					
+					
+					
+					myDbHelper = new DataBaseHelper(SettingActivity.this);
+				    
+				     
+				    try {myDbHelper.createDataBase();} 
+				    	catch (IOException ioe) 
+				    	{throw new Error("Unable to create database");}
+				     
+				    try {myDbHelper.openDataBase();}
+				    	catch(SQLException sqle){throw sqle;}
+					
+					configureAdhocNetwork(0);
+					
+					try{
+						mWifiManager.setWifiEnabled(false);
+						Log.w("Setting","WifiOn");
+					}catch(SecurityException s){
+
+
+					}
+					
+					database=myDbHelper.getReadableDatabase();
+					
+					
+					Cursor cursor;
+					cursor = database.rawQuery(("select * from delay"), null);
+					cursor.moveToFirst();
+					String Ric = new String();
+					Ric=cursor.getString(cursor.getColumnIndex("delay"));
+					Log.w("Setting","Erasing "+Ric);
+					database.delete("delay", "delay = '"+Ric+"'", null);
+					ContentValues values = new ContentValues();
+					values.put("delay",(stop-start)+"" );
+
+					Log.w("Setting","Inserted "+(stop-start)+"");
+					database.insert("delay", null, values);
+					cursor.close();
+					
+					
+					database.close();
+					arg0.unregisterReceiver(this);
+					
+			
+				
+				}
+				
+				
+			}
+			
+			
+			
+	    };
+	       
+	    
+	    
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

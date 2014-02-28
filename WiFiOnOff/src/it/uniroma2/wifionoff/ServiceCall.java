@@ -25,10 +25,14 @@ public class ServiceCall {
 	
 	
 	private static final String LOG_TAG = "ServiceCall";;
-	//private boolean bKeepRunning;
 
 	private MessageMaker myMessageMaker= MessageMaker.getInstance();
 	private static ServiceCall instance;
+
+	private Thread gdt;
+	private MyDatagramReceiver rct;
+
+	
 	
 	public static synchronized ServiceCall getInstance(Context ctx)
 	{
@@ -40,7 +44,11 @@ public class ServiceCall {
 	return instance;
 	}
     
-	
+	public Context getCTX(){
+		
+		return this.ctx;
+		
+	}
 	
 	private void runUdpClient(String c)  {
 
@@ -130,7 +138,6 @@ public class ServiceCall {
             	}
 			} catch (SocketException e1) {
 				// TODO Auto-generated catch block
-				Log.i("NON","VA");
 				e1.printStackTrace();
 			}
             bKeepRunning = true;
@@ -139,13 +146,13 @@ public class ServiceCall {
 	                socket.receive(packet);
 	                message = new String(lmessage, 0, packet.getLength());
 	                IP = (packet.getAddress()).getHostAddress();
-	                Log.i("Get", message+" from "+ IP);
+	                Log.i("Get", message+" from "+ IP);//per le prove
 	                if(message!=null && (!(IP.equals(wi.Ip)))){
 	                    Log.i("Get", message+" from "+ IP);
-	                	//NOTIFICA IL MESSAGGIO RICEVUTO!!!
 	                    
 	                    Intent i = new Intent(Setting.GETMESSAGE);
 	                    i.putExtra("Text", message);
+	                    i.putExtra("IP", IP);
 	                    ctx.sendBroadcast(i);
 	                	
 	                }
@@ -292,10 +299,5 @@ public class ServiceCall {
 	}
 	
 
-	private Thread gdt;
-	private MyDatagramReceiver rct;
-	
-	private Bundle ext;
-	
 
 }

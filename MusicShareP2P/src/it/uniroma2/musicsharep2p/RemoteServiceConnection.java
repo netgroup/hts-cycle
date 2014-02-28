@@ -17,20 +17,41 @@ public class RemoteServiceConnection implements ServiceConnection {
 	private static final String AIDL_MESSAGE_SERVICE_PACKAGE = "it.uniroma2.wifionoff";
 	private static final String INTENT_ACTION_BIND_MESSAGE_SERVICE = "bind.OnOffService";
 	private final static String LOG_TAG = "RemoteServiceConnection";
-
+	public int downloading;
 	public OnOffService service;
 	private Context context;
+	public boolean timeout;
+
 	public static RemoteServiceConnection instance = null;
 	
 	private RemoteServiceConnection(Context c){
 		this.context=c;
+		downloading =0;
+		timeout=false;
 		}
 	
-//	
-//	public RemoteServiceConnection() {
-//		context = null;
-//		}
 
+	public boolean isdownloading(){
+		if(downloading==0){
+			
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public synchronized void resettime(){
+		
+		timeout=false;
+		
+	}
+	
+	public synchronized void istimeout(){
+		
+		timeout=false;
+		
+	}
+	
 	@Override
 	public void onServiceConnected(ComponentName arg0, IBinder arg1) {		
 		this.service = OnOffService.Stub.asInterface(arg1);
@@ -99,9 +120,26 @@ public class RemoteServiceConnection implements ServiceConnection {
 		if(instance==null){
 			
 			instance=new RemoteServiceConnection(applicationContext);
-			
+		
 		}
 		return instance;
+	}
+	
+	public synchronized void setDownloading(){
+		
+		this.downloading++;
+		
+	}
+	public synchronized void setNotDownloading(){
+		
+		this.downloading--;;
+		
+	}
+
+
+	public synchronized boolean Timeout() {
+		// TODO Auto-generated method stub
+		return this.timeout;
 	}
 
 	

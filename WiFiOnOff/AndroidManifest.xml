@@ -14,6 +14,8 @@
     </uses-permission>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
+    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" >
+    </uses-permission>
 
     <application
         android:allowBackup="true"
@@ -22,21 +24,26 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="it.uniroma2.wifionoff.MainActivity"
-            android:label="@string/app_name"
             android:configChanges="orientation"
-   			 android:screenOrientation="portrait" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-   <activity
+        <activity
             android:name="it.uniroma2.wifionoff.MyListActivity"
-            android:label="@string/title_activity_my_list" 
             android:configChanges="orientation"
-    android:screenOrientation="portrait"
-             />
+            android:label="@string/title_activity_my_list"
+            android:screenOrientation="portrait" />
+
+        <receiver android:name="it.uniroma2.wifionoff.ShutDownReceiver" >
+            <intent-filter android:priority="1" >
+                <action android:name="it.uniroma2.shutdownbroadcast" />
+            </intent-filter>
+        </receiver>
         <receiver android:name="it.uniroma2.wifionoff.AlarmReceiver" >
         </receiver>
         <receiver android:name="it.uniroma2.wifionoff.WifiOffReceiver" >
@@ -51,9 +58,17 @@
 
         <activity
             android:name="it.uniroma2.wifionoff.SettingActivity"
-            android:label="@string/title_activity_setting" 
             android:configChanges="orientation"
-    android:screenOrientation="portrait">
+            android:label="@string/title_activity_setting"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="it.uniroma2.wifionoff.NameActivity"
+            android:label="@string/title_activity_name" >
+        </activity>
+        <activity
+            android:name="it.uniroma2.wifionoff.AppActivity"
+            android:label="@string/title_activity_app" >
         </activity>
     </application>
 

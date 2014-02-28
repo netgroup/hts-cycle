@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiConfiguration.KeyMgmt;
 import android.os.SystemClock;
@@ -97,9 +98,7 @@ public class WifiReceiver{
 				
 				if(arg1.getStringExtra("end").equals("ok")){
 					
-					//cambiare questa parte! mettersi in coda dall'altra app e vedere se torna quell'intent!
-
-					
+	
 					
 					configureAdhocNetwork(0);
 					Ip = null;
@@ -118,9 +117,7 @@ public class WifiReceiver{
 				
 				 	WifiReceiver wi = WifiReceiver.getInstance(ctx,mWifiManager,mWifiManagerNew);
 				 	ServiceCall ser = ServiceCall.getInstance(ctx);
-					
-					 	
-	
+					OnOffService.isOff();
 
 							
 					
@@ -128,8 +125,7 @@ public class WifiReceiver{
 					ctx.unregisterReceiver(wi.ListenReceiver);
 					ctx.unregisterReceiver(wi.WifiReceiverB);
 					ctx.unregisterReceiver(ser.MyReceiver);
-					ctx.unregisterReceiver(ser.netReceiver);
-					
+				
 					
 					
 					

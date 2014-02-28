@@ -1,9 +1,14 @@
 package it.uniroma2.wifionoff;
 
+import it.uniroma2.wifionoff.aidl.OnOffService.Stub;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.uniroma2.wifionoff.aidl.OnOffService.Stub;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -11,15 +16,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
-import android.widget.Toast;
 
 public class OnOffService extends Service { 
 	
@@ -29,7 +32,16 @@ public class OnOffService extends Service {
 	private WifiManager mWifiManager;
 	private WifiManagerNew mWifiManagerNew;
 	public static String Device;
-	public static boolean alarm;
+	//public static boolean alarm;
+	public static boolean stillon=false;
+	private static Integer delay=0;
+	public static List<String> IPs;
+	private SQLiteDatabase database;
+	private DataBaseHelper myDbHelper;
+	private Notification n;
+	
+	
+
 	
 	   public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
 
@@ -37,28 +49,26 @@ public class OnOffService extends Service {
 		public void onReceive(Context arg1, Intent intent) {
 			// TODO Auto-generated method stub
 			
-			//
+			
 			
 			mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			
 			 mWifiManagerNew = new WifiManagerNew(mWifiManager);
 
-			
-
-		       final IntentFilter Filter = new IntentFilter();
-		       Filter.addAction(Setting.TIMEOUT_OCCURRED);
 			 	ServiceCall ser = ServiceCall.getInstance(context);
+			 	WifiReceiver wi = WifiReceiver.getInstance(context,mWifiManager,mWifiManagerNew);
+				 
+
+		       
+			 	
+		   if(!mWifiManager.isWifiEnabled()){
+					
+			   final IntentFilter Filter = new IntentFilter();
+		       Filter.addAction(Setting.TIMEOUT_OCCURRED);
 			 	context.registerReceiver(ser.MyReceiver, Filter);
 				Log.w(LOGTAG,"MyReceiver Registered");
-			 
-			 	final IntentFilter FilterS = new IntentFilter();
-		       FilterS.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-			 	context.registerReceiver(ser.netReceiver, FilterS);
-				Log.w(LOGTAG,"NetReceiver Registered");
 			 	
-			 	
-			 	WifiReceiver wi = WifiReceiver.getInstance(context,mWifiManager,mWifiManagerNew);
-			 	final IntentFilter FilterW = new IntentFilter();
+			 		final IntentFilter FilterW = new IntentFilter();
 		        FilterW.addAction(Setting.DONE);
 			 	context.registerReceiver(wi.ListenReceiver, FilterW);
 				Log.w(LOGTAG,"ListenReceiver Registered");
@@ -68,9 +78,14 @@ public class OnOffService extends Service {
 		       FilterT.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
 			 	context.registerReceiver(wi.WifiReceiverB, FilterT);
 				Log.w(LOGTAG,"WifiReceiver Registered");
-			 	
-
-					
+			   
+			 	final IntentFilter FilterS = new IntentFilter();
+			       FilterS.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+				 	context.registerReceiver(ser.netReceiver, FilterS);
+					Log.w(LOGTAG,"NetReceiver Registered");
+				 	
+			   
+			   
 					try{
 						mWifiManager.setWifiEnabled(true);
 						Log.w("Service","WifiOn");
@@ -80,7 +95,43 @@ public class OnOffService extends Service {
 					}
 			
 
-			 
+			}else{
+				
+				if(stillon){
+					
+				 	final IntentFilter FilterS = new IntentFilter();
+				       FilterS.addAction(Setting.SEARCH);
+					 	context.registerReceiver(ser.netReceiver, FilterS);
+						Log.w(LOGTAG,"NetReceiver Registered");
+					 	
+					
+					
+					try{
+						
+						Thread.sleep(delay);
+						
+						
+					}catch(Exception e){
+						
+						e.printStackTrace();
+					}
+					
+					sendBroadcast(new Intent(Setting.SEARCH)); 
+					
+					
+				}else{
+					
+					
+
+					unregisterReceiver(wi.ListenReceiver);
+					unregisterReceiver(wi.WifiReceiverB);
+					unregisterReceiver(ser.MyReceiver);
+					unregisterReceiver(ser.netReceiver);
+					
+					
+				}
+				
+			}
 			
 		}
 	   
@@ -96,12 +147,58 @@ public class OnOffService extends Service {
 	@Override
 	public void onCreate() { 
 		super.onCreate();
+	    try {myDbHelper.createDataBase();} 
+    	catch (IOException ioe) 
+    	{throw new Error("Unable to create database");}
+     
+    try {myDbHelper.openDataBase();}
+    	catch(SQLException sqle){throw sqle;}
+    
 		context = getApplicationContext();
 		IntentFilter Start=new IntentFilter(Setting.START);
 		context.registerReceiver(MyReceiver, Start);
 		ConnectedApp=new ArrayList<AppHelper>();
-		Device="Pippo";
+	    database=myDbHelper.getReadableDatabase();
+		Cursor cursor;
+		cursor = database.rawQuery(("select * from name"), null);
+		cursor.moveToFirst();
+		Device=cursor.getString(cursor.getColumnIndex("name"));
+		cursor.close();
+		database.close();
+		IPs=new ArrayList<String>();
 		Log.i(LOGTAG, "SharingFileService Created");
+		//Intent per la notifica
+				Intent intent2 = new Intent(this, MainActivity.class);
+				 PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent2, 0);
+
+				
+				
+				 //crea la notifica
+				n = new Notification.Builder(this)
+				         .setContentTitle("WiFiOnOff")
+				         .setContentText("The service is running!")
+				         .setSmallIcon(R.drawable.ic_launcher)
+				         .setContentIntent(pIntent)
+				         .setOngoing(true) 
+				         .build();
+				     
+				
+				 //attivo la notifica
+				 NotificationManager notificationManager = 
+				   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		
+
+				 notificationManager.notify(0, n); 
+	}
+	
+	@Override
+	public void onDestroy(){
+		
+		NotificationManager notificationManager = 
+				   (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+				 notificationManager.cancel( 0); 
+		
 	}
 
 	
@@ -255,6 +352,21 @@ public class OnOffService extends Service {
 				return false;
 			}   
 			  };
+
+		public static void setDelay(int parseInt) {
+			// TODO Auto-generated method stub
+			delay=parseInt;
+		}
+
+		public static void setStilloN() {
+			// TODO Auto-generated method stub
+			stillon=true;
+		}
+
+		public static void isOff() {
+			// TODO Auto-generated method stub
+			stillon=false;
+		}
 		  
 		} 
 
