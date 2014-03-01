@@ -212,90 +212,17 @@ public class OnOffService extends Service {
 		    
 		  }
 		  
-////		  class IncomingHandler extends Handler {
-////		        @Override
-////		        public void handleMessage(Message msg) {
-////		            
-////		        	Bundle data = msg.getData();        	
-////		        	String dataString = data.getString("MyString");
-////		        	Toast.makeText(getApplicationContext(), 
-////		                     dataString, Toast.LENGTH_SHORT).show();
-////		        }
-////		     }
-//			
-//		  final Messenger myMessenger = new Messenger(new IncomingHandler());
-//			
+			
 		  @Override
 		  public IBinder onBind(Intent arg0) {
 		  Log.d(getClass().getSimpleName(), "onBind()");
-//		  String app="App1";
-//		  String Bro="Bro1";
-//		  if(arg0.hasExtra("Application")){
-//			  
-//			  app=(arg0.getCharSequenceExtra("Application")).toString();
-//			  
-//		  }
-//		  
-//		  if(arg0.hasExtra("Broadcast")){
-//			  
-//			  Bro=(arg0.getCharSequenceExtra("Broadcast")).toString();
-//			  
-//		  }
-//		  
-//		  AppHelper a= new AppHelper( app, Bro);
-//		  
-//		  ConnectedApp.add( a );
-		  
+  
 		  
 		  
 		  return OnOffServiceStub;
 		  }  
 		  
-//		  @Override
-//		  public boolean onUnbind(Intent intent){
-//			  Log.d(getClass().getSimpleName(), "onUnBind()");
-//			  
-//			  if(intent.hasExtra("Application")){
-//					for(int i=0; i< OnOffService.ConnectedApp.size(); i++)
-//						if( ( (ConnectedApp.get(i)).getName()).equals(intent.getCharSequenceExtra("Application")) )
-//						{
-//							ConnectedApp.remove(i);
-//							Log.w("Service","rimossa");
-//							return true;
-//							
-//						}
-//				  
-//				  
-//			  }
-//			  
-//			return true;
-//			  
-//		  }
-//		  
-//		  @Override
-//		  public void onRebind (Intent intent){
-//			  
-//			  Log.d(getClass().getSimpleName(), "onReBind()");
-//			  String app="App1";
-//			  String Bro="Bro1";
-//			  if(intent.hasExtra("Application")){
-//				  
-//				  app=(intent.getCharSequenceExtra("Application")).toString();
-//				  
-//			  }
-//			  
-//			  if(intent.hasExtra("Broadcast")){
-//				  
-//				  Bro=(intent.getCharSequenceExtra("Broadcast")).toString();
-//				  
-//			  }
-//			  
-//			  AppHelper a= new AppHelper( app, Bro);
-//			  
-//			  ConnectedApp.add( a );
-//			  
-//		  }
-		  
+
 		  private Stub OnOffServiceStub = new Stub() {
 			  public void doServiceTask() throws RemoteException {
 			  /// Write here, code to be executed in background

@@ -13,6 +13,17 @@ public class PacketHandler extends BroadcastReceiver{
 		String m=intent.getStringExtra("Message");
 		String ip=intent.getStringExtra("IP");
 		
+		boolean done=false;
+		
+		for(int i=0;i<OnOffService.IPs.size();i++){
+			
+			if(OnOffService.IPs.get(i).equals(ip)){
+				done=true;
+				
+			}
+			
+		}
+	if(!done)	{
 		String[] lines = m.split(System.getProperty("line.separator"));
 		
 		for(int i=1; i<lines.length;i++){
@@ -30,9 +41,10 @@ public class PacketHandler extends BroadcastReceiver{
 				}
 				
 			}
+				
 			
 		}
-			
+	}
 		
 		
 		

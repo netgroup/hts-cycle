@@ -14,7 +14,7 @@ public class ShutDownReceiver extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		
 		
-		OnOffService.setStilloN();
+		OnOffService.isOff();
 		ServiceCall ser=ServiceCall.getInstance(context);
 		ser.getCTX().unregisterReceiver(ser.netReceiver);
 		

@@ -12,7 +12,7 @@ public class WifiOffReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		
-		
+		OnOffService.setStilloN();
 		context.sendOrderedBroadcast(new Intent("it.uniroma2.shutdownbroadcast"),null); 
 				 Log.w("Service", "BroadCast Sended");
 
