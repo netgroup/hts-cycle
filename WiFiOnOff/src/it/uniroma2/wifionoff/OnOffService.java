@@ -49,7 +49,7 @@ public class OnOffService extends Service {
 		public void onReceive(Context arg1, Intent intent) {
 			// TODO Auto-generated method stub
 			
-			
+			IPs= new ArrayList<String>();
 			
 			mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 			

@@ -24,6 +24,7 @@ public class PacketHandler extends BroadcastReceiver{
 			
 		}
 	if(!done)	{
+		OnOffService.IPs.add(ip);
 		String[] lines = m.split(System.getProperty("line.separator"));
 		
 		for(int i=1; i<lines.length;i++){
