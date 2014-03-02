@@ -11,12 +11,16 @@ public class MusicShutReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
-		
+
 		RemoteServiceConnection rem = RemoteServiceConnection.getInstance(context);
 		if(!rem.isdownloading()){
 			
 			Bundle results = getResultExtras(true);
-	
+			//do something if needed
+			
+		}else{
+			
+			abortBroadcast();
 			
 		}
 
